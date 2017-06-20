@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>PF is back !</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
@@ -23,10 +23,228 @@
 	</head>
 	<body>
 		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
+<div class="slides">
+	<section><h1>Puffy is back !</h1>
+	<p><img src="images/puffy61.gif"/></p>
+	<h3>L'heureux tour de PF :)</h3>
+	<p><small>Geoffroy Desvernay</small></p>
+	<p><small>CC0</small></p>
+	</section>
+	<section id="contexte">
+		<section id="pourquoi">
+			<h2>pourquoi ?</h2>
+		</section>
+		<section id="avant">
+			<h2>Avant 2005: OpenBSD/PF</h2>
+			<p>…tout allait bien…</p>
+			<p class="fragment">(c'était mieux avant …)</p>
+			<p class="fragment">Puis on a eu les moyens d'acheter "mieux"</p>
+			<p class="fragment">"mieux": n.m. (fin du XXème siècle) sorte d'incantation consistant à investir en matériel et licences sensée faire gagner du "temps ETP" (de la masse salariale).</p>
+		</section>
+	</section>
+	<section id="juniper">
+		<section>
+			<h3>A ce propos, Juniper® fait très bien:</h3>
+			<ul>
+			<li class="fragment">des jeux de cartes très rigolos avec des blagues sur Cisco®</li>
+			<li class="fragment">des tapis de souris</li>
+			<li class="fragment">payer le support (par an, tous les ans trois zéros pour une boite)</li>
+			<li class="fragment">de l'IPv4 en udp</li>
+			<li class="fragment">du "sflow" (== netflow mais pour rire seulement), comme HP d'ailleurs</li>
+			<li class="fragment">La peinture grise mat inrayable</li>
+			</ul>
+		</section>
+		<section>
+			<p>Le nôtre fermait les connexions TCP tout seul (~25-30% de connexions "drop"ées)</cwpli>
+			<p class="fragment">Leur support a même reproduit le bug (donc ils ont bien un support)</p>
+			<p class="fragment">jamais eu de suite (pour le bug hein, la maintenance était toujours payante)</p>
+		</section>
+		<section>
+			<p>Bilan:
+			<ul>
+				<li class="fragment">X0000€ + 10ans *X000€</li>
+				<li class="fragment">+ 1 gros bug</li>
+				<li class="fragment">+ une bonne semaine ETP de debug</li>
+				<li class="fragment">+ un "bon" support bien payant</li>
+			</ul></p>
+			<p class="fragment">= … ben rien.</p>
+			<p class="fragment"> on a résolu le bug en débranchant l'appareil. 🚽</p>
+			<p class="fragment"><small>Si c'est tres cher, achètes toi un étage de juristes ou passe passe …au libre !</small></p>
+		</section>
+		<section>
+			<h3>Je ne suis pas anti juniper, la preuve:</h3>
+			<p class="fragment">Le support Cisco® nous a quand même fait le coup du rayon cosmique pour expliquer un reboot violent…</p>
+			<p class="fragment">chez ^(HPE?|Aruba), on a droit a 1024 <b>espoirs</b> d'ACLs sur notre super cœur de réseau (pour remplacer les ~2600 ACL's réelles qu'on utilisait sur le ciscosmique)</p>
+			<p class="fragment">… et pas de moyen sérieux pour debugguer les acls, pas d'IPfix</p>
+			<p class="fragment">(c'était 2 fois moins cher que cisco, on a 4 fois moins…)</p>
+		</section>
+		<section>
+			<p class="fragment">Chez ArrubHPE on a au moins du filtrage IPv6 correct… si on a pas besoin de filtrage IPv4</p>
+			<p class="fragment">Chui de bonne humeur, je parle pas du coup des alimentations :)</p>
+			<p class="fragment">Au fait, 'ISSU' c'est bien le mot anglais pour 'problème' non ?</p>
+			<p class="fragment">Bon… soyons constructifs ;-)</p>
+		</section>
+	</section>
+	<section id="openbsd">
+		<section>
+			<h3>Donc, retour à OpenBSD …</h3>
+			<p class="fragment"><a href="http://www.openbsd.org">OpenBSD</a>: système d'exploitation BSD, fork de NetBSD en 1993</p>
+			<p class="fragment">Axé sur la sécurité et la cryptographie</p>
+			<p class="fragment">Sur des bonnes machines pas chères et garanties 7 ans !</p>
+			<p class="fragment">Merci MATINFO !!!</p>
+		</section>
+		<section>
+			<h3>OpenBSD, ca fait aussi…</h3>
+			<ul>
+			<li class="fragment">open<a href="http://man.openbsd.org/bgpd">bgpd</a></li>
+			<li class="fragment">open<a href="http://man.openbsd.org/ospfd">ospfd</a></li>
+			<li class="fragment">mpls (pas testé)</li>
+			<li class="fragment">load-balancing/failover de services avec <a href="http://man.openbsd.org/relayd">relayd</a>/<a href="http://man.openbsd.org/carp">carp</a> (== VRRP+ha-proxy)</li>
+			<li class="fragment">IPFIX avec (<a href="http://man.openbsd.org/pflow">pflow</a>, == netflow v10)</li>
+			<ul>
+		</section>
+		<section>
+			<h3>… et tout ce qu'on sait faire avec une machine *nix !</h3>
+			<ul>
+			<li class="fragment"><a href="man.openbsd.org/man">man</a> !!!</li>
+			<li class="fragment">mise à jour des machines toujours possible 10 ans après l'achat !</li>
+			<li class="fragment">smartctl, systat, snmp, …</li>
+			<li class="fragment">top, ping, tcpdump, mtr, nmap, munin, nagios, rsync, …</li>
+			<li class="fragment">sh, ksh, zsh, perl, python, php, …</li>
+			<li class="fragment">……………</li>
+			</ul>
+		</section>
+		<section>
+			<p><img src="images/bgplg.png" /></p>
+		</section>
+	</section>
+	<section id="pf">
+		<section>
+			<h3>… et Packet Filter (PF)</h3>
+			<li class="fragment">Syntaxe claire</li>
+			<li class="fragment">Facilement redondant (<a href="http://man.openbsd.org/pfsync">pfsync</a>)</li>
+			<li class="fragment">Performant (pas encore à 10G, en cours)</li>
+			<p><img src="images/openbsd.jpg" style="position: fixed; bottom: 1px; right: 1px;"/></p>
+		</section>
+		<section id="readable">
+			<h2>Lisible</h2>
+			<p><code><pre># variables
+ext_if="bge0"
+int_if="bge1"
+
+# tables
+table &lt;websrv&gt; { 192.0.2.0/30 2001:DB8::b0:fad0 203.0.113.3 }
+table &lt;chefs&gt; { 198.51.100.0/24 2001:DB8:1:999::/64 }
+
+# regles
+pass
+
+pass in quick on $ext_if to &lt;websrv&gt; port 80
+pass in quick on $ext_if from &lt;chefs&gt;
+
+block drop in quick on $ext_if
+			</pre></code></p>
+		</section>
+		<section id="power"><h3>Puissant</h3>
+			<p><code><pre>
+# rate-limiting
+pass in quick proto {icmp icmp6} keep state (\
+				pflow,\
+				source-track rule,\
+				max-src-states 10,\
+				max-src-nodes 50)
+pass in proto {tcp udp} to $dns_srv port 53 \
+				set prio 4 \
+				keep state (pflow, \
+				source-track rule, \
+				max-src-states 50, \
+				max-src-nodes 500)
+			</pre></code></p>
+		</section>
+		<section id="power2">
+			<p><code><pre>
+# import d'une liste d'IP depuis un fichier
+# ( généré par domain2cidr.pl - http://ow.ly/TJKD30cKLBY )
+table &lt;gmail&gt; persist file "/etc/pf.tables/google.list"
+table &lt;mailru&gt; persist file "/etc/pf.tables/mailru.list"
+table &lt;bluemail&gt; persist file "/etc/pf.tables/bluemail.list"
+…
+block return in quick on $ext_if tcp from &lt;mailru&gt; to $submission port {submission imaps}
+block return in quick on $ext_if tcp from &lt;gmail&gt; to $submission port {submission imaps}
+block return in quick on $ext_if tcp from &lt;bluemail&gt; to $submission port {submission imaps}
+			</pre></code></p>
+			<p><code><pre>
+# anti brute-force
+block in quick drop from &lt;casse-bonbons&gt;
+# 5 syn / 40 secondes max, sinon blacklist
+pass in quick to $webauth port 443 keep state \
+	(max-src-conn-rate 5/40, \
+	overload &lt;casse-bonbons&gt; flush global)
+			</pre></code></p>
+			<p><code><pre># cron pour expiration des tables auto-remplies
+*/15 * * * *	/sbin/pfctl -t casse-bonbons -T expire 3600
+			</pre></code></p>
+		</section>
+		<section id="power3">
+			<p>nat, redirection, …<code><pre>
+match out on raimu inet from &lt;nat_nets&gt; nat-to $nat_addr
+pass in on raimu proto {tcp,udp} to $oldns port 53 rdr-to $newdns
+</pre></code></p>
+			<p class="fragment">(re-)Routage (== cisco route-map): <code class="fragment"><pre>
+pass in log quick on serveurs from $vpn_clients \
+	to $vpn_dests route-to ($int_v4_if 198.51.100.1)
+</pre></code></p>
+		</section>
+		<section id="power4">
+			<p class="fragment">On peut même simuler un réseau foireux ;)<code><pre>
+pass in quick on $ext_if tcp from os { MacOS, Windows, Sega } \
+			to $www_srv probability 10%
+</pre></code></p>
+		</section>
+		<section id="failover">
+			<h3>Redondant</h3>
+			<p><img src="images/pfsync.svg" /></p>
+		</section>
+	
+	</section>
+	<section id="bonus">
+		<section id="groups">
+			<h3>Groupes d'interfaces</h3>
+			<p><code><pre>ifconfig vlan4 group postes
+ifconfig vlan36 group postes
+ifconfig vlan3333 group raimu
+ifconfig vlan666 group guests</pre></code>
+<code><pre>pass in quick on postes to …
+block in on raimu …</pre></code></p>
+		</section>
+		<section id="relayd">
+			<h3>Répartition de charge intelligente</h3>
+			<p><a href="http://man.openbsd.org/relayd">relayd</a> est comparable à ha-proxy. Il peut travailler au niveau 3 (il ajoute des règles PF de redirections vers les 'backends' valides), et/ou au dessus.</p>
+			<p><code><pre>redirect wwws_lb {
+        listen on $rproxy4_addr tcp port https
+        listen on $rproxy6_addr tcp port https
+        pftag HTTPS
+        sticky-address
+        forward to &lt;webhosts&gt; check tcp port https
+}</pre></code></p>
+		</section>
+	</section>
+
+	<section id="couts">
+		<section>
+			<h3>Cout - matériel et licences</h3>
+			<p>Nos machines: PE R230 + carte X520 2*10G DAC + carte 4*1G</p>
+			<p>A benchmarker: apu2 ou equivalent (~200€ max, 3*1G, 2 ou 4 G RAM)</p>
+		</section>
+		<section id="maintenance">
+			<h3>Combien d'ETP ?</h3>
+			<p>~ 1 semaine ETP pour la mise en place</p>
+			<p>+ 6 jours de conseil/config/formation bienveillante d'<a href="http://evolix.com/">Evolix</a> (petite multinationale marseillaise)</p>
+			<p>Une ou deux mises à jour / an (~1 heure * 2 machines) SANS COUPURE !</p>
+		</section>
+	</section>
+<!-- end slides -->
+</div>
 		</div>
 
 		<script src="lib/js/head.min.js"></script>
