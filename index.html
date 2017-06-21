@@ -27,8 +27,8 @@
 	<section><h1>Puffy is back !</h1>
 	<p><img src="images/puffy61.gif"/></p>
 	<h3>L'heureux tour de PF :)</h3>
-	<p><small>Geoffroy Desvernay</small></p>
-	<p><small>CC0</small></p>
+	<p><small>Geoffroy Desvernay – Ecole Centrale de Marseille</small></p>
+	<p><small>CC-BY</small></p>
 	</section>
 	<section id="contexte">
 		<section id="pourquoi">
@@ -74,7 +74,7 @@
 		<section>
 			<h3>Je ne suis pas anti juniper, la preuve:</h3>
 			<p class="fragment">Le support Cisco® nous a quand même fait le coup du rayon cosmique pour expliquer un reboot violent…</p>
-			<p class="fragment">chez ^(HPE?|Aruba), on a droit a 1024 <b>espoirs</b> d'ACLs sur notre super cœur de réseau (pour remplacer les ~2600 ACL's réelles qu'on utilisait sur le ciscosmique)</p>
+			<p class="fragment">chez ^(HPE?|Aruba), on a droit a 1024 <b><i>espoirs</i></b> d'ACLs sur notre super cœur de réseau (pour remplacer les ~2600 ACL's réelles qu'on utilisait sur le ciscosmique)</p>
 			<p class="fragment">… et pas de moyen sérieux pour debugguer les acls, pas d'IPfix</p>
 			<p class="fragment">(c'était 2 fois moins cher que cisco, on a 4 fois moins…)</p>
 		</section>
@@ -88,16 +88,25 @@
 	<section id="openbsd">
 		<section>
 			<h3>Donc, retour à OpenBSD …</h3>
-			<p class="fragment"><a href="http://www.openbsd.org">OpenBSD</a>: système d'exploitation BSD, fork de NetBSD en 1993</p>
+			<p class="fragment"><a href="http://www.openbsd.org">OpenBSD</a>: système d'exploitation BSD, fork de NetBSD en 1995</p>
 			<p class="fragment">Axé sur la sécurité et la cryptographie</p>
-			<p class="fragment">Sur des bonnes machines pas chères et garanties 7 ans !</p>
-			<p class="fragment">Merci MATINFO !!!</p>
+			<p class="fragment">Sur des bonnes machines pas chères et garanties 7 ans, Merci MATINFO !!!</p>
+			<p class="fragment">Du raid1 sur un firewall 🦄</p>
+			<p class="fragment">Mise a jour majeure ~ tous les 6 mois depuis <blink>23</blink> ans, deux versions supportées</p>
+		</section>
+		<section>
+			<h3>Ca doit être compliqué !</h3>
+			<p class="fragment">Installation: 10mn (automatisable avec un fichier de réponse)</p>
+			<p class="fragment">BSD style: une fois installé (1Go) y'a tout ce qu'il faut</p>
+			<p class="fragment">Pour le reste, <code><pre class="fragment">pkg_add vim zsh sl …</pre></code></p>
+			<p class="fragment">Mises à jour mineures: <code><pre class="fragment">syspatch # ne pas oublier &lt;ENTREE&gt;</pre></code></p>
 		</section>
 		<section>
 			<h3>OpenBSD, ca fait aussi…</h3>
 			<ul>
 			<li class="fragment">open<a href="http://man.openbsd.org/bgpd">bgpd</a></li>
 			<li class="fragment">open<a href="http://man.openbsd.org/ospfd">ospfd</a></li>
+			<li class="fragment"><a href="http://man.openbsd.org/carp">carp</a> (VRRP on steroids)</li>
 			<li class="fragment">mpls (pas testé)</li>
 			<li class="fragment">load-balancing/failover de services avec <a href="http://man.openbsd.org/relayd">relayd</a>/<a href="http://man.openbsd.org/carp">carp</a> (== VRRP+ha-proxy)</li>
 			<li class="fragment">IPFIX avec (<a href="http://man.openbsd.org/pflow">pflow</a>, == netflow v10)</li>
@@ -107,11 +116,12 @@
 			<h3>… et tout ce qu'on sait faire avec une machine *nix !</h3>
 			<ul>
 			<li class="fragment"><a href="man.openbsd.org/man">man</a> !!!</li>
+			<li class="fragment">un vrai terminal^H^H^H^H^H^H^H^H shell</li>
 			<li class="fragment">mise à jour des machines toujours possible 10 ans après l'achat !</li>
 			<li class="fragment">smartctl, systat, snmp, …</li>
 			<li class="fragment">top, ping, tcpdump, mtr, nmap, munin, nagios, rsync, …</li>
 			<li class="fragment">sh, ksh, zsh, perl, python, php, …</li>
-			<li class="fragment">……………</li>
+			<li class="fragment">&lt;HS&gt;KDE, gnome, libreoffice, … &lt;/HS&gt;<li>
 			</ul>
 		</section>
 		<section>
@@ -121,30 +131,104 @@
 	<section id="pf">
 		<section>
 			<h3>… et Packet Filter (PF)</h3>
+			<ul>
 			<li class="fragment">Syntaxe claire</li>
 			<li class="fragment">Facilement redondant (<a href="http://man.openbsd.org/pfsync">pfsync</a>)</li>
 			<li class="fragment">Performant (pas encore à 10G, en cours)</li>
+			</ul>
 			<p><img src="images/openbsd.jpg" style="position: fixed; bottom: 1px; right: 1px;"/></p>
 		</section>
 		<section id="readable">
 			<h2>Lisible</h2>
-			<p><code><pre># variables
+			<p><code><pre>
+pass in quick on bge0 to 192.0.2.0/30 port 80
+block drop in quick on bge0
+pass quick
+</pre></code></p>
+		</section>
+		<section id="souple">
+			<h3>souple</h3>
+			<p><code><pre>
+# variables
 ext_if="bge0"
 int_if="bge1"
+serveurs_web="{ 192.0.2.1 192.0.2.26 }"
 
-# tables
-table &lt;websrv&gt; { 192.0.2.0/30 2001:DB8::b0:fad0 203.0.113.3 }
-table &lt;chefs&gt; { 198.51.100.0/24 2001:DB8:1:999::/64 }
-
-# regles
-pass
-
-pass in quick on $ext_if to &lt;websrv&gt; port 80
-pass in quick on $ext_if from &lt;chefs&gt;
-
-block drop in quick on $ext_if
-			</pre></code></p>
+pass in quick on $ext_if to $serveurs_web port 80
+pass in quick on $int_if
+pass out quick
+</pre></code></p>
 		</section>
+		<section>
+			<h3>efficace</h3>
+			<p><code><pre>
+belle_maman="{ 203.0.113.66 2001:DB8:f1f1::f0le }"
+# tables (max 200000 adresses/réseaux *par défaut*)
+table &lt;mechants&gt; file "/etc/pf.tables/liste.zeus_cc" \
+		file "/etc/pf.tables/liste.ransomeware" \
+		{ $belle_maman }
+
+pass in quick on $ext_if from &lt;mechants&gt; rdr-to $honeypot
+block return in quick on $int_if to &lt;mechants&gt;
+</pre></code></p>
+		</section>
+		<section>
+			<h3>pratique</h3>
+			<p><code><pre>
+match out on $ext_if from $salle_formation \
+		to $srv_formation \
+		nat-to $ip_autorisee_la_bas
+</pre></code></p>
+		</section>
+		<section>
+			<h3>concis: a perimètre comparable</h3>
+			<ul><li>cisco+juniper: 385+312 acl's pour IPv4</li>
+			<li class="fragment">pf: 129 lignes 'pass|block|match' (576 une fois parsées) pour:<ul>
+				<li class="fragment">la même chose qu'avant</li>
+				<li class="fragment">+ IPv6 partout</li>
+				<li class="fragment">+ le filtrage du wifi/filaire guest</li>
+				<li class="fragment">+ des milliers d'IPs filtrées (botnets etc)</li>
+			</ul></li>
+			</ul>
+		</section>
+		<section id="arrubhpevs">
+			<h3>arrubahpe:</h3>
+<p><code><pre>rule 710 permit udp source 198.51.100.0 0.0.1.255 source-port eq sunrpc
+rule 750 permit tcp source 198.51.100.0 0.0.1.255 destination-port eq 135
+rule 755 permit udp source 198.51.100.0 0.0.1.255 destination-port range netbios-ns netbios-dgm
+rule 760 permit tcp source 198.51.100.0 0.0.1.255 destination-port eq 139
+rule 765 permit tcp source 198.51.100.0 0.0.1.255 destination-port eq 445
+rule 770 permit udp source 198.51.100.0 0.0.1.255 destination-port eq sunrpc
+rule 775 permit tcp source 198.51.100.0 0.0.1.255 destination-port eq sunrpc
+rule 780 permit tcp source 198.51.100.0 0.0.1.255 destination-port eq 2049
+rule 785 permit udp source 198.51.100.0 0.0.1.255 destination-port eq 2049
+rule 790 permit tcp source 198.51.100.0 0.0.1.255 destination-port range 4045 4049
+rule 795 permit udp source 198.51.100.0 0.0.1.255 destination-port range 4045 4049
+rule 800 permit udp source 198.51.100.0 0.0.1.255 source-port eq 4047 destination-port gt 1024
+</pre></code></p>
+<p class="fragment">J'autorise tout le réseau (1024 <b><i>espoirs</i></b> d'acl max)</p>
+<p class="fragment">A multiplier par le nombre de réseaux clients</p>
+		</section>
+		<section id="pf_vs">
+<p><code><pre>
+ports_filers_tcp="{139 445 111 2049 4045:4049}"
+ports_filers_udp="{135:137 111 2049 4045:4049}"
+
+personnels="{ 198.51.100.0/24 2001:DB8:b0b::/64 2001:DB8:ba11::/64 }"
+etudiants="{ 203.0.113.0/24 2001:DB8:ffff:e1e::/64 }"
+
+table &lt;filers&gt; { 203.0.113.12/28 2001:DB8:f11e::/64 }
+table &lt;clients&gt; { $personnels $etudiants }
+
+pass in quick on $int_if proto tcp from &lt;clients&gt; \
+	to &lt;filers&gt; port $ports_filers_tcp
+pass in quick on $int_if proto udp from &lt;clients&gt; \
+	to &lt;filers&gt; port $ports_filers_udp
+pass in quick on $int_if proto udp from &lt;clients&gt; \
+	port 4047 to &lt;filers&gt; port > 1024
+</pre></code></p>
+		</section>
+
 		<section id="power"><h3>Puissant</h3>
 			<p><code><pre>
 # rate-limiting
@@ -165,13 +249,12 @@ pass in proto {tcp udp} to $dns_srv port 53 \
 			<p><code><pre>
 # import d'une liste d'IP depuis un fichier
 # ( généré par domain2cidr.pl - http://ow.ly/TJKD30cKLBY )
-table &lt;gmail&gt; persist file "/etc/pf.tables/google.list"
-table &lt;mailru&gt; persist file "/etc/pf.tables/mailru.list"
-table &lt;bluemail&gt; persist file "/etc/pf.tables/bluemail.list"
+table &lt;mailsuckers&gt; persist file "/etc/pf.tables/google.list" \
+		file "/etc/pf.tables/mailru.list" \
+		file "/etc/pf.tables/bluemail.list"
 …
-block return in quick on $ext_if tcp from &lt;mailru&gt; to $submission port {submission imaps}
-block return in quick on $ext_if tcp from &lt;gmail&gt; to $submission port {submission imaps}
-block return in quick on $ext_if tcp from &lt;bluemail&gt; to $submission port {submission imaps}
+block return in quick on $ext_if tcp from &lt;mailsuckers&gt; \
+		to $submission port {submission imaps}
 			</pre></code></p>
 			<p><code><pre>
 # anti brute-force
@@ -190,13 +273,14 @@ pass in quick to $webauth port 443 keep state \
 match out on raimu inet from &lt;nat_nets&gt; nat-to $nat_addr
 pass in on raimu proto {tcp,udp} to $oldns port 53 rdr-to $newdns
 </pre></code></p>
-			<p class="fragment">(re-)Routage (== cisco route-map): <code class="fragment"><pre>
+			<p class="fragment">(re-)Routage (=~ cisco route-map):<code><pre class="fragment">
 pass in log quick on serveurs from $vpn_clients \
 	to $vpn_dests route-to ($int_v4_if 198.51.100.1)
 </pre></code></p>
 		</section>
 		<section id="power4">
-			<p class="fragment">On peut même simuler un réseau foireux ;)<code><pre>
+			<p>Forte intégration de pf avec tout le reste (tags, labels, tables pf depuis BGP, …)</p>
+			<p class="fragment">On peut même simuler un réseau foireux ;)<code><pre class="fragment">
 pass in quick on $ext_if tcp from os { MacOS, Windows, Sega } \
 			to $www_srv probability 10%
 </pre></code></p>
@@ -205,9 +289,14 @@ pass in quick on $ext_if tcp from os { MacOS, Windows, Sega } \
 			<h3>Redondant</h3>
 			<p><img src="images/pfsync.svg" /></p>
 		</section>
-	
 	</section>
 	<section id="bonus">
+		<section id="quick">
+			<h3>quick ou pas quick ?</h3>
+			<p>quick == first match wins</p>
+			<p>sinon == last match wins</p>
+			<p class="fragment">C'est VOUS qui voyez… on peut aussi mélanger</p>
+		</section>
 		<section id="groups">
 			<h3>Groupes d'interfaces</h3>
 			<p><code><pre>ifconfig vlan4 group postes
@@ -228,19 +317,69 @@ block in on raimu …</pre></code></p>
         forward to &lt;webhosts&gt; check tcp port https
 }</pre></code></p>
 		</section>
+		<section id="dsr">
+			<h3>relayd + DSR</h3>
+			<p class="fragment"><i>DSR</i>: Direct Server Return</p>
+			<ol><li class="frament">pf ne modifie pas les paquet L3</li>
+				<li class="fragment">Les serveurs ont tous (sur lo0) l'IP de destination</li>
+				<li class="fragment">Une autre IP de chaque serveur permet l'encapsulation L2</li>
+				<li class="fragment">Les paquets de réponse <i>peuvent</i> passer ailleurs</li>
+			</ol>
+			<p><code><pre class="fragment">route to &lt;webhosts&gt; check tcp port https interface vlan234</pre></code></p>
+		</section>
+		<section id="rtables">
+			<h3>Plusieurs tables de routage ?</h3>
+			<p><code><pre class="fragment">route -T1 add default 203.0.113.254</pre></code></p>
+			<p><code><pre class="fragment">route -T1 exec mtr -t 8.8.8.8</pre></code></p>
+			<p><code><pre class="fragment"># pf.conf
+pass in quick on rdomain 0 from &lt;via_freebox&gt; rtable 1 keep state (floating)</pre></code></p>
+			<p class="fragment">Intégré dans openbgpd, openospfd, …</p>
+		</section>
 	</section>
-
+	<section id="ecm">
+		<section>
+			<h3>Chez nous</h3>
+			<ul><li>Routage redondant (bgpd.conf = 72 lignes avec filtres)</li>
+			<li class="fragment">Routage interne (ospfd.conf + ospf6d.conf)</li>
+			<li class="fragment">Filtrage<ul><li class="fragment">D'entrée de site</li>
+				<li class="fragment">Des serveurs publics</li>
+				<li class="fragment">Des réseaux "non-fiables" (wifi, guests, …)</li>
+			</ul></li>
+			<li class="fragment">relayd L3 (HA/HP) pour https, smtp, imap, dns (+ ldap ailleurs)</li>
+		</section>
+		<section>
+			<p>+ deux soekris (collector ! 15W, 2cœurs, 2G RAM) pour le confort…</p>
+			<ul><li class="fragment">Boot &lt; 60s</li>
+				<li class="fragment">faux masters DNS</li>
+				<li class="fragment">resolveur DNS</li>
+				<li class="fragment">replique ldap</li>
+				<li class="fragment">+ relayd pour ldap</li>
+			</ul>
+		</section>
+	</section>
 	<section id="couts">
 		<section>
 			<h3>Cout - matériel et licences</h3>
 			<p>Nos machines: PE R230 + carte X520 2*10G DAC + carte 4*1G</p>
-			<p>A benchmarker: apu2 ou equivalent (~200€ max, 3*1G, 2 ou 4 G RAM)</p>
+			<p class="fragment">Autant vous dire qu'il en reste sous la pédale…</p>
+			<p class="fragment"> Utilisé: ~1G RAM, max 12% de 1 CPU pour ~40000 etats</p>
+			<p class="fragment">A benchmarker: apu2 ou equivalent (~200€ max, 3*1G, 2 ou 4 G RAM)</p>
 		</section>
 		<section id="maintenance">
 			<h3>Combien d'ETP ?</h3>
 			<p>~ 1 semaine ETP pour la mise en place</p>
 			<p>+ 6 jours de conseil/config/formation bienveillante d'<a href="http://evolix.com/">Evolix</a> (petite multinationale marseillaise)</p>
 			<p>Une ou deux mises à jour / an (~1 heure * 2 machines) SANS COUPURE !</p>
+			<p class="fragment">… MAJ bios et firmwares comprise 🕶</p>
+		</section>
+		<section id="administration">
+			<h3>Au quotidien</h3>
+			<p><code><pre>vipf # edite && verifie && charge && \
+# idem sur le second && git commit</pre></code></p>
+			<p><code><pre class="fragment">logpf # tcpdump -n -e -ttt -i pflog0
+Jun 21 22:55:26.438328 rule 5/(match) block in on vlan196: \
+147.94.24.6.60400 &gt; 147.94.19.60.3493: R 2726651265:2726651265(0) win 0 (DF)
+</pre></code></p>
 		</section>
 	</section>
 <!-- end slides -->
