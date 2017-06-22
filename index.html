@@ -74,7 +74,7 @@
 		<section>
 			<h3>Je ne suis pas anti juniper, la preuve:</h3>
 			<p class="fragment">Le support Cisco® nous a quand même fait le coup du rayon cosmique pour expliquer un reboot violent…</p>
-			<p class="fragment">chez ^(HPE?|Aruba), on a droit a 1024 <b><i>espoirs</i></b> d'ACLs sur notre super cœur de réseau (pour remplacer les ~2600 ACL's réelles qu'on utilisait sur le ciscosmique)</p>
+			<p class="fragment">chez ^(HPE?|Aruba), on a droit a 1024 <span class="fragment highlight-red">espoirs</span> d'ACLs sur notre super cœur de réseau (pour remplacer les ~2600 ACL's réelles qu'on utilisait sur le ciscosmique)</p>
 			<p class="fragment">… et pas de moyen sérieux pour debugguer les acls, pas d'IPfix</p>
 			<p class="fragment">(c'était 2 fois moins cher que cisco, on a 4 fois moins…)</p>
 		</section>
@@ -168,13 +168,16 @@ table &lt;mechants&gt; file "/etc/pf.tables/liste.zeus_cc" \
 		file "/etc/pf.tables/liste.ransomeware" \
 		{ $belle_maman }
 
+# on colle les méchants avec du miel
 pass in quick on $ext_if from &lt;mechants&gt; rdr-to $honeypot
+# et on interdit aux gentils de leur parler
 block return in quick on $int_if to &lt;mechants&gt;
 </pre></code></p>
 		</section>
 		<section>
 			<h3>pratique</h3>
-			<p><code><pre>
+			<p>Euh… on t'a dit ? ce matin y'a du personnel en formation dans une salle élèves, mais ils doivent aller sur le site a qui on a donné les IP du personnel ? Non ? paskeu c'est dans 5 minutes…</p>
+			<p><code><pre class="fragment">
 match out on $ext_if from $salle_formation \
 		to $srv_formation \
 		nat-to $ip_autorisee_la_bas
@@ -206,7 +209,7 @@ rule 790 permit tcp source 198.51.100.0 0.0.1.255 destination-port range 4045 40
 rule 795 permit udp source 198.51.100.0 0.0.1.255 destination-port range 4045 4049
 rule 800 permit udp source 198.51.100.0 0.0.1.255 source-port eq 4047 destination-port gt 1024
 </pre></code></p>
-<p class="fragment">J'autorise tout le réseau (1024 <b><i>espoirs</i></b> d'acl max)</p>
+<p class="fragment">J'autorise tout le réseau (1024 <span class="fragment highlight-red">espoirs d'acl</span><span class="fragment fade-right"> max</span>)</p>
 <p class="fragment">A multiplier par le nombre de réseaux clients</p>
 		</section>
 		<section id="pf_vs">
@@ -329,6 +332,7 @@ block in on raimu …</pre></code></p>
 		</section>
 		<section id="rtables">
 			<h3>Plusieurs tables de routage ?</h3>
+			<p><code><pre class="fragment">ifconfig bge1 203.0.113.55/24 rtable 1</pre></code></p>
 			<p><code><pre class="fragment">route -T1 add default 203.0.113.254</pre></code></p>
 			<p><code><pre class="fragment">route -T1 exec mtr -t 8.8.8.8</pre></code></p>
 			<p><code><pre class="fragment"># pf.conf
@@ -363,7 +367,7 @@ pass in quick on rdomain 0 from &lt;via_freebox&gt; rtable 1 keep state (floatin
 			<p>Nos machines: PE R230 + carte X520 2*10G DAC + carte 4*1G</p>
 			<p class="fragment">Autant vous dire qu'il en reste sous la pédale…</p>
 			<p class="fragment"> Utilisé: ~1G RAM, max 12% de 1 CPU pour ~40000 etats</p>
-			<p class="fragment">A benchmarker: apu2 ou equivalent (~200€ max, 3*1G, 2 ou 4 G RAM)</p>
+			<p class="fragment">A benchmarker: apu2 ou equivalent (X00€, 3*1G, 2 ou 4 G RAM)</p>
 		</section>
 		<section id="maintenance">
 			<h3>Combien d'ETP ?</h3>
